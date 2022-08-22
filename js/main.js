@@ -1,3 +1,91 @@
+const counters = document.querySelectorAll('.counter');
+const speed = 2000; // The lower the slower
+
+counters.forEach(counter => {
+	const updateCount = () => {
+		const target = +counter.getAttribute('data-target');
+		const count = +counter.innerText;
+
+		// Lower inc to slow and higher to slow
+		const inc = target / speed;
+
+		// console.log(inc);
+		// console.log(count);
+
+		// Check if target is reached
+		if (count < target) {
+			// Add inc to count and output in counter
+			counter.innerText = count + inc;
+			// Call function every ms
+			setTimeout(updateCount, 1);
+		} else {
+			counter.innerText = target;
+		}
+	};
+
+	updateCount();
+});
+
+// counter end 
+jQuery(document).ready(function($){
+	var isLateralNavAnimating = false;
+	
+	//open/close lateral navigation
+	$('.cd-nav-trigger').on('click', function(event){
+		event.preventDefault();
+		//stop if nav animation is running 
+		if( !isLateralNavAnimating ) {
+			if($(this).parents('.csstransitions').length > 0 ) isLateralNavAnimating = true; 
+			
+			$('body').toggleClass('navigation-is-open');
+			$('.cd-navigation-wrapper').one('webkitTransitionEnd otransitionend oTransitionEnd msTransitionEnd transitionend', function(){
+				//animation is over
+				isLateralNavAnimating = false;
+			});
+		}
+	});
+});
+// side menu end 
+
+// Fetches recent post from blog...only applicable for Blogger blogs. 
+// By Hamza Dhamiya
+// Twitter: @hamzadhamiya
+var q = $('li.blog-post');
+q.each(function() {
+  var e = $(this),
+    indexnumber = Math.random(),
+    domain = 'http://bloggerever.com',
+    f = e.attr('data-label'),
+    g = domain + '/feeds/posts/summary/-/' + f + '?max-results=4&alt=json-in-script';
+  e.append('<div class="nav-item"></div>');
+  $.ajax({
+    type: 'GET',
+    url: g,
+    async: false,
+    contentType: "application/json",
+    dataType: 'jsonp',
+    success: function(json) {
+      for (var i = 0; i < json.feed.entry.length; i++) {
+        var h = json.feed.entry[i];
+        for (var j = 0; j < h.link.length; j++) {
+          if (h.link[j].rel == 'alternate') {
+            var l = h.link[j].href;
+            break;
+          }
+        }
+        try {
+          var k = h.media$thumbnail.url.replace("s72-c", "s250-no");
+        } catch (m) {
+          var k= 'https://lh4.googleusercontent.com/-sEsEVEIbC_A/VC75LXVY_9I/AAAAAAAAFjw/3IMVKlywmmE/s500/No%2520image.jpg';
+        }
+        var z = h.title.$t;
+        var nnitem = "<div class='item'><img src='"+k+"'/><h3><a href='"+l+"'>"+z+"</a></h3></div>";
+        e.find('.nav-item').append(nnitem);
+      }
+    }
+  });
+});
+// menu end 
 $('.slider_main').owlCarousel({
     loop: true,
     margin: 0,
@@ -246,29 +334,29 @@ $(document).ready(function() {
     });
 });
 //footer bg image
-$(document).ready(function()
-{
+// $(document).ready(function()
+// {
 
-var pixelToMove = 50;
+// var pixelToMove = 50;
 
-$(".footer-img").mousemove(function(e)
-{
+// $(".footer-img").mousemove(function(e)
+// {
 
-var width = $(this).innerWidth();
+// var width = $(this).innerWidth();
 
-var height = $(this).innerHeight();
+// var height = $(this).innerHeight();
 
-var newValueX = (e.pageX / width) *
-pixelToMove;
+// var newValueX = (e.pageX / width) *
+// pixelToMove;
 
-var newValueY = (e.pageY / height) *
-pixelToMove;
+// var newValueY = (e.pageY / height) *
+// pixelToMove;
 
-$(this).css('background-position',
-newValueX + '%' + ' ' + newValueY + '%');
+// $(this).css('background-position',
+// newValueX + '%' + ' ' + newValueY + '%');
 
-});
-});
+// });
+// });
 
 
 //for slider
@@ -398,6 +486,13 @@ $(document).ready(function() {
     window.addEventListener("scroll", function() {
         var header = document.querySelector(".header");
         header.classList.toggle("sticky-bar", window.scrollY > 50);
+    });
+
+});
+$(document).ready(function() {
+    window.addEventListener("scroll", function() {
+        var headers = document.querySelector(".headers");
+        headers.classList.toggle("sticky-bar", window.scrollY > 50);
     });
 
 });
